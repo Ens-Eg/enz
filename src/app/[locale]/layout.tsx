@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { cairo, fontVariables } from "@/lib/fonts";
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import RenderInProvider from "@/components/Global/RenderInProvider";
 import ProgressBar from "@/components/Global/ProgressBar";
 import GoogleGtag from "@/components/Global/GoogleGtag";
@@ -38,6 +39,8 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+  setRequestLocale(locale);
+  const messages = await getMessages();
   return (
     <html
       lang={locale}
@@ -66,7 +69,7 @@ export default async function RootLayout({
           pauseOnHover
           theme="light"
         />
-        <NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <RenderInProvider>{children}</RenderInProvider>
         </NextIntlClientProvider>
       </body>

@@ -3,8 +3,7 @@ import dynamic from "next/dynamic";
 import { getTranslations } from "next-intl/server";
 import { buildSeoMetadata } from "@/lib/seo";
 import { FaWhatsapp } from "react-icons/fa";
-import HeroSection from "@/components/HomePage/HeroSection";
-import DeferredMount from "@/components/Global/DeferredMount";
+import HeroContent from "@/components/HomePage/HeroContent";
 
 const Features = dynamic(() => import("@/components/HomePage/FeatureSection"), {
   loading: () => <SectionSkeleton height="520px" />,
@@ -40,7 +39,7 @@ function SectionSkeleton({ height }: { height: string }) {
   return (
     <div
       aria-hidden
-      className="w-full animate-pulse bg-slate-50 dark:bg-[#0d1117]"
+      className="w-full animate-pulse bg-slate-100 dark:bg-[#15203c]"
       style={{ minHeight: height }}
     />
   );
@@ -70,31 +69,13 @@ async function Page({ params }: Props) {
 
   return (
     <>
-      <HeroSection />
-
-      <DeferredMount minHeight="640px">
-        <TemplateShow />
-      </DeferredMount>
-
-      <DeferredMount minHeight="720px">
-        <PhoneVideoSection />
-      </DeferredMount>
-
-      <DeferredMount minHeight="520px">
-        <Features />
-      </DeferredMount>
-
-      <DeferredMount minHeight="480px">
-        <HowItWorks />
-      </DeferredMount>
-
-      <DeferredMount minHeight="420px">
-        <FAQ />
-      </DeferredMount>
-
-      <DeferredMount minHeight="320px">
-        <FooterSection />
-      </DeferredMount>
+      <HeroContent locale={locale} />
+      <TemplateShow />
+      <PhoneVideoSection />
+      <Features />
+      <HowItWorks />
+      <FAQ />
+      <FooterSection />
 
       <a
         href={HOME_WHATSAPP_URL}
