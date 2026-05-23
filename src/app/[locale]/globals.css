@@ -4,6 +4,60 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Homepage: clearer compositing on iOS Safari */
+.site-header {
+  isolation: isolate;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.hero-section {
+  isolation: isolate;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  contain: layout style;
+}
+
+.home-main {
+  isolation: isolate;
+}
+
+@media (max-width: 1023px) {
+  .hero-background-blur {
+    display: none !important;
+  }
+
+  .hero-background-grid {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .site-header {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .hero-section,
+  .site-header,
+  #hero {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-background-grid {
+    -webkit-mask-image: radial-gradient(
+      circle at center,
+      black 0%,
+      transparent 80%
+    );
+    mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+  }
+}
+
 :root {
   /* Modern palette */
   /* --primary: #06bed6; */

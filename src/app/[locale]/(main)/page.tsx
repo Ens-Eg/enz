@@ -4,46 +4,40 @@ import { getTranslations } from "next-intl/server";
 import { buildSeoMetadata } from "@/lib/seo";
 import { FaWhatsapp } from "react-icons/fa";
 import HeroContent from "@/components/HomePage/HeroContent";
+import HeroPhoneDesktopPortal from "@/components/HomePage/HeroPhoneDesktopPortal";
+import SectionSkeleton from "@/components/HomePage/SectionSkeleton";
 
-const Features = dynamic(() => import("@/components/HomePage/FeatureSection"), {
-  loading: () => <SectionSkeleton height="520px" />,
-});
+const dynamicSection = (factory: () => Promise<unknown>, height: string) =>
+  dynamic(() => factory() as Promise<{ default: React.ComponentType }>, {
+    loading: () => <SectionSkeleton height={height} />,
+  });
 
-const TemplateShow = dynamic(
+const TemplateShow = dynamicSection(
   () => import("@/components/HomePage/TemplateShow"),
-  {
-    loading: () => <SectionSkeleton height="640px" />,
-  },
+  "640px",
 );
 
-const PhoneVideoSection = dynamic(
+const PhoneVideoSection = dynamicSection(
   () => import("@/components/HomePage/PhoneVideoSection"),
-  {
-    loading: () => <SectionSkeleton height="720px" />,
-  },
+  "720px",
 );
 
-const HowItWorks = dynamic(() => import("@/components/HomePage/HowItWorks"), {
-  loading: () => <SectionSkeleton height="480px" />,
-});
+const Features = dynamicSection(
+  () => import("@/components/HomePage/FeatureSection"),
+  "520px",
+);
 
-const FAQ = dynamic(() => import("@/components/HomePage/FAQ"), {
-  loading: () => <SectionSkeleton height="420px" />,
-});
+const HowItWorks = dynamicSection(
+  () => import("@/components/HomePage/HowItWorks"),
+  "480px",
+);
 
-const FooterSection = dynamic(() => import("@/components/HomePage/Footer"), {
-  loading: () => <SectionSkeleton height="320px" />,
-});
+const FAQ = dynamicSection(() => import("@/components/HomePage/FAQ"), "420px");
 
-function SectionSkeleton({ height }: { height: string }) {
-  return (
-    <div
-      aria-hidden
-      className="w-full animate-pulse bg-slate-100 dark:bg-[#15203c]"
-      style={{ minHeight: height }}
-    />
-  );
-}
+const FooterSection = dynamicSection(
+  () => import("@/components/HomePage/Footer"),
+  "320px",
+);
 
 const HOME_WHATSAPP_URL = "https://wa.me/201500800050";
 type Props = { params: Promise<{ locale: string }> };
@@ -76,6 +70,7 @@ async function Page({ params }: Props) {
       <HowItWorks />
       <FAQ />
       <FooterSection />
+      <HeroPhoneDesktopPortal />
 
       <a
         href={HOME_WHATSAPP_URL}
