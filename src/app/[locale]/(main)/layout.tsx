@@ -9,7 +9,7 @@ export default async function MainLayout({
   return (
     <>
       <Header />
-      <main className="min-h-screen w-full overflow-x-hidden">{children}</main>
+      {children}
     </>
   );
 }

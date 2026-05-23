@@ -1,6 +1,5 @@
 "use client";
 
-import ReduxProvider from "@/components/Global/ReduxProvider";
 import Layout from "@/components/Dashboard/Layout";
 import { axiosGet } from "@/shared/axiosCall";
 import { Menu } from "@/types/Menu";
@@ -58,10 +57,10 @@ export default function ParentLayout({ children }: ParentLayoutProps) {
   }, [segment, locale, dispatch]);
 
   return (
-    <ReduxProvider>
+    <>
       <AuthUserHydrate />
       <FcmTokenSync />
       <Layout segment={segment}>{children}</Layout>
-    </ReduxProvider>
+    </>
   );
 }

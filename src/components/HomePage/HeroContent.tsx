@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Background from "@/components/Global/Background";
+import HeroPhoneMount from "@/components/HomePage/HeroPhoneMount";
 
 type HeroContentProps = {
   locale: string;
@@ -52,22 +53,7 @@ export default async function HeroContent({ locale }: HeroContentProps) {
           </div>
 
           <div className="order-2 flex w-full justify-center lg:w-1/2">
-            <div
-              className="relative w-full max-w-[340px] overflow-hidden rounded-[50px] border-12 border-slate-800 bg-slate-900 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] dark:border-slate-900"
-              style={{ height: "560px", minHeight: "560px" }}
-              aria-hidden
-            >
-              <div className="flex h-full flex-col items-center justify-center bg-purple-50 p-8 dark:bg-purple-950/40">
-                <div className="mb-6 flex h-40 w-40 items-center justify-center rounded-[32px] border-2 border-purple-200 bg-white shadow-xl dark:border-purple-500/30 dark:bg-slate-900">
-                  <span className="text-6xl text-purple-600" aria-hidden>
-                    ▦
-                  </span>
-                </div>
-                <p className="text-center text-lg font-bold text-purple-700 dark:text-purple-300">
-                  {t("scanCodeToBrowse")}
-                </p>
-              </div>
-            </div>
+            <HeroPhoneMount />
           </div>
         </div>
       </div>
