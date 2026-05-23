@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import HeroBackground from "@/components/HomePage/HeroBackground";
+import HeroLinaImage from "@/components/HomePage/HeroLinaImage";
 
 type HeroContentProps = {
   locale: string;
@@ -17,7 +18,9 @@ export default async function HeroContent({ locale }: HeroContentProps) {
     >
       <HeroBackground />
       <div className="container relative z-10 mx-auto px-6">
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center lg:max-w-4xl">
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
+          <HeroLinaImage alt={t("linaAlt")} />
+
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-100 bg-purple-50 px-5 py-2 text-sm font-bold text-purple-700 shadow-sm dark:border-purple-500/30 dark:bg-purple-500/20 dark:text-purple-400">
             <span>{t("badge")}</span>
             <span>🚀</span>
