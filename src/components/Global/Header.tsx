@@ -4,20 +4,18 @@ import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useAppSelector } from "@/store/hooks";
-import UserDropDown from "../UserDropDown";
 import { FiMenu, FiX } from "react-icons/fi";
 import Logo from "../Global/Logo";
 import { homeLinks } from "@/modules/Header";
 import LanguageToggle from "./LanguageTogle";
 import DarkModeToggle from "./DarkModeToggle";
+import HeaderMarketingAuth from "./HeaderMarketingAuth";
 
 function isHomePathname(pathname: string) {
   const p = pathname.replace(/\/$/, "") || "/";
-  return p === "/" || p === "/en";
+  return p === "/" || p === "/en" || p === "/ar";
 }
 
-// NavLink Component
 interface NavLinkProps {
   href: string;
   children: React.ReactNode;
@@ -52,8 +50,6 @@ function Header() {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations("");
-  const tHeader = useTranslations("Landing.header");
-  const profile = useAppSelector((state) => state.auth);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -81,7 +77,7 @@ function Header() {
 
   const handleInPageNav = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
+    href: string,
   ) => {
     handleNavClick();
     if (!href.startsWith("/#")) return;
@@ -98,25 +94,23 @@ function Header() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-        ? "backdrop-blur-xl bg-white/70 dark:bg-[#0d1117]/70 py-3 shadow-sm border-b border-purple-100 dark:border-purple-900"
-        : "bg-transparent py-6 border-transparent"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? "border-b border-purple-100 bg-white/70 py-3 shadow-sm backdrop-blur-xl dark:border-purple-900 dark:bg-[#0d1117]/70"
+          : "border-transparent bg-transparent py-6"
+      }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
+      <div className="container mx-auto flex items-center justify-between px-6">
         <Link
           href="/"
           prefetch={false}
           onClick={handleNavClick}
-          className="flex items-center gap-2 text-xl font-semibold text-slate-900 dark:text-white"
+          className="flex shrink-0 items-center gap-2 text-xl font-semibold text-slate-900 dark:text-white"
         >
           <Logo />
         </Link>
 
-
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-10 lg:gap-5 xl:gap-10">
+        <div className="hidden items-center gap-10 lg:flex lg:gap-5 xl:gap-10">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
@@ -129,46 +123,15 @@ function Header() {
           ))}
         </div>
 
-        {/* Right Side Actions */}
-        <div className="flex items-center ms-auto lg:ms-0 gap-1 lg:gap-2 xl:gap-4">
-          {/* Language Toggle */}
+        <div className="ms-auto flex items-center gap-1 lg:ms-0 lg:gap-2 xl:gap-4">
           <LanguageToggle locale={locale} pathname={pathname} />
-
-          {/* Dark Mode Toggle */}
           <DarkModeToggle />
-
-
-          {/* Auth Buttons */}
-          {profile.loading === "yes" ? (
-            <UserDropDown />
-          ) : (
-            <>
-              {/* Sign In Button */}
-              <Link
-                href={`/auth/login`}
-                prefetch={false}
-                className="px-5 hidden lg:block py-2 rounded-full font-bold text-[14px] text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/20 transition-all"
-              >
-                {tHeader("signIn")}
-              </Link>
-
-              {/* Sign Up Button */}
-              <div className="hidden lg:block">
-                <Link
-                  href={`/auth/register`}
-                  prefetch={false}
-                  className="px-7 py-2.5 rounded-full bg-linear-to-r from-purple-600 to-purple-700 dark:from-purple-500 dark:to-purple-600 text-white font-bold text-[14px] shadow-lg shadow-purple-200 dark:shadow-purple-900/50 transition-all hover:shadow-xl"
-                >
-                  {tHeader("startNow")}
-                </Link>
-              </div>
-            </>
-          )}
+          <HeaderMarketingAuth />
         </div>
 
-        {/* Mobile Menu Button */}
         <button
-          className="lg:hidden flex items-center justify-center text-slate-900 dark:text-white p-2"
+          type="button"
+          className="flex shrink-0 items-center justify-center p-2 text-slate-900 lg:hidden dark:text-white"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle navigation"
           aria-expanded={isOpen}
@@ -177,42 +140,22 @@ function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 backdrop-blur-xl bg-white/90 dark:bg-[#0d1117]/90 shadow-2xl p-8 lg:hidden flex flex-col gap-3 text-center border-t border-purple-50 dark:border-purple-900">
+        <div className="absolute top-full right-0 left-0 flex flex-col gap-3 border-t border-purple-50 bg-white/90 p-8 text-center shadow-2xl backdrop-blur-xl lg:hidden dark:border-purple-900 dark:bg-[#0d1117]/90">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
               prefetch={false}
               onClick={(e) => handleInPageNav(e, link.href)}
-              className="py-4 text-lg font-bold text-slate-800 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center justify-center gap-4 cursor-pointer"
+              className="flex cursor-pointer items-center justify-center gap-4 py-4 text-lg font-bold text-slate-800 hover:text-purple-600 dark:text-slate-200 dark:hover:text-purple-400"
             >
               <link.icon size={22} className="text-purple-500" />
               {link.name}
             </Link>
           ))}
 
-          {profile.loading !== "yes" && (
-            <div className="pt-4 flex flex-col gap-3">
-              <Link
-                href={`/auth/login`}
-                prefetch={false}
-                onClick={handleNavClick}
-                className="block w-full py-3 rounded-2xl border-2 border-purple-600 dark:border-purple-500 text-purple-600 dark:text-purple-400 font-bold text-base hover:bg-purple-50 dark:hover:bg-purple-500/20 transition-all"
-              >
-                {tHeader("signIn")}
-              </Link>
-              <Link
-                href={`/auth/register`}
-                prefetch={false}
-                onClick={handleNavClick}
-                className="block w-full py-4 rounded-2xl bg-linear-to-r from-purple-600 to-purple-700 dark:from-purple-500 dark:to-purple-600 text-white font-bold text-base"
-              >
-                {tHeader("startNow")}
-              </Link>
-            </div>
-          )}
+          <HeaderMarketingAuth variant="mobile" onNavigate={handleNavClick} />
         </div>
       )}
     </nav>

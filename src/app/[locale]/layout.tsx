@@ -4,7 +4,6 @@ import "./globals.css";
 import { cairo, fontVariables } from "@/lib/fonts";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import RenderInProvider from "@/components/Global/RenderInProvider";
 import ProgressBar from "@/components/Global/ProgressBar";
 import GoogleGtag from "@/components/Global/GoogleGtag";
 import GoogleTagManager from "@/components/Global/GoogleTagManager";
@@ -70,7 +69,7 @@ export default async function RootLayout({
           theme="light"
         />
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <RenderInProvider>{children}</RenderInProvider>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>
