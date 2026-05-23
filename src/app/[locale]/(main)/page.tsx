@@ -4,40 +4,47 @@ import { getTranslations } from "next-intl/server";
 import { buildSeoMetadata } from "@/lib/seo";
 import { FaWhatsapp } from "react-icons/fa";
 import HeroSection from "@/components/HomePage/HeroSection";
-import Features from "@/components/HomePage/FeatureSection";
+import DeferredMount from "@/components/Global/DeferredMount";
 
-const PhoneVideoSection = dynamic(
-  () => import("@/components/HomePage/PhoneVideoSection"),
-  {
-    loading: () => <div className="h-[500px]" />,
-  },
-);
-
-const HowItWorks = dynamic(() => import("@/components/HomePage/HowItWorks"), {
-  loading: () => <div className="h-[400px]" />,
+const Features = dynamic(() => import("@/components/HomePage/FeatureSection"), {
+  loading: () => <SectionSkeleton height="520px" />,
 });
-
-const PricingSection = dynamic(
-  () => import("@/components/HomePage/PricingSection"),
-  {
-    loading: () => <div className="h-[500px]" />,
-  },
-);
 
 const TemplateShow = dynamic(
   () => import("@/components/HomePage/TemplateShow"),
   {
-    loading: () => <div className="h-[500px]" />,
+    loading: () => <SectionSkeleton height="640px" />,
   },
 );
 
+const PhoneVideoSection = dynamic(
+  () => import("@/components/HomePage/PhoneVideoSection"),
+  {
+    loading: () => <SectionSkeleton height="720px" />,
+  },
+);
+
+const HowItWorks = dynamic(() => import("@/components/HomePage/HowItWorks"), {
+  loading: () => <SectionSkeleton height="480px" />,
+});
+
 const FAQ = dynamic(() => import("@/components/HomePage/FAQ"), {
-  loading: () => <div className="h-[400px]" />,
+  loading: () => <SectionSkeleton height="420px" />,
 });
 
 const FooterSection = dynamic(() => import("@/components/HomePage/Footer"), {
-  loading: () => <div className="h-[300px]" />,
+  loading: () => <SectionSkeleton height="320px" />,
 });
+
+function SectionSkeleton({ height }: { height: string }) {
+  return (
+    <div
+      aria-hidden
+      className="w-full animate-pulse bg-slate-50 dark:bg-[#0d1117]"
+      style={{ minHeight: height }}
+    />
+  );
+}
 
 const HOME_WHATSAPP_URL = "https://wa.me/201500800050";
 type Props = { params: Promise<{ locale: string }> };
@@ -64,14 +71,31 @@ async function Page({ params }: Props) {
   return (
     <>
       <HeroSection />
-      <TemplateShow />
-      <PhoneVideoSection />
-      <Features />
 
-      <HowItWorks />
-      <FAQ />
+      <DeferredMount minHeight="640px">
+        <TemplateShow />
+      </DeferredMount>
 
-      <FooterSection />
+      <DeferredMount minHeight="720px">
+        <PhoneVideoSection />
+      </DeferredMount>
+
+      <DeferredMount minHeight="520px">
+        <Features />
+      </DeferredMount>
+
+      <DeferredMount minHeight="480px">
+        <HowItWorks />
+      </DeferredMount>
+
+      <DeferredMount minHeight="420px">
+        <FAQ />
+      </DeferredMount>
+
+      <DeferredMount minHeight="320px">
+        <FooterSection />
+      </DeferredMount>
+
       <a
         href={HOME_WHATSAPP_URL}
         target="_blank"
